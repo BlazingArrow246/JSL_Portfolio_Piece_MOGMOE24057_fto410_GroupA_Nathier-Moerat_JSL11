@@ -1,6 +1,12 @@
 // TASK: import helper functions from utils
 // TASK: import initialData
 
+import { helperFunction } from './utils/taskFunction.js';
+import { initialData } from './utils/data.js';
+// Your program's logic starts here
+console.log(helperFunction());  // Output: This is a helper function from taskFunction.js!
+console.log(initialData);  
+
 
 /*************************************************************************************************************************************************
  * FIX BUGS!!!
@@ -10,7 +16,7 @@
 function initializeData() {
   if (!localStorage.getItem('tasks')) {
     localStorage.setItem('tasks', JSON.stringify(initialData)); 
-    localStorage.setItem('showSideBar', 'true')
+    localStorage.setItem('showSideBar', true)   //removed qoutes from "true"
   } else {
     console.log('Data already exists in localStorage');
   }
@@ -18,8 +24,38 @@ function initializeData() {
 
 // TASK: Get elements from the DOM
 const elements = {
-
-}
+    // Sidebar container
+    sideBar: document.getElementById('side-bar-div'),
+  
+    // Logo container in the sidebar
+    sideLogoDiv: document.getElementById('side-logo-div'),
+  
+    // Boards navigation links container
+    boardsNavLinksDiv: document.getElementById('boards-nav-links-div'),
+  
+    // Board name displayed in header (active board)
+    headerBoardName: document.getElementById('header-board-name'),  
+    
+    // Theme switcher (checkbox and icons)
+    themeSwitch: document.getElementById('switch'),
+    iconDark: document.getElementById('icon-dark'),
+    iconLight: document.getElementById('icon-light'),
+  
+    // Sidebar hide button and icon
+    hideSideBarBtn: document.getElementById('hide-side-bar-btn'),
+    iconHideSidebar: document.getElementById('icon-hide-sidebar'),
+  
+    // Modal window elements
+    modalWindow: document.getElementById('task-modal'),  
+    editTaskModal: document.getElementById('edit-task-modal'),  
+  
+    // Filter overlay
+    filterDiv: document.getElementById('filter-div'),  
+    
+    // Task buttons
+    createNewTaskBtn: document.getElementById('create-new-task-btn'),  
+  
+};
 
 let activeBoard = ""
 
@@ -83,7 +119,7 @@ function filterAndDisplayTasksByBoard(boardName) {
       taskElement.classList.add("task-div");
       taskElement.textContent = task.title;
       taskElement.setAttribute('data-task-id', task.id);
-
+    
       // Listen for a click event on each task and open a modal
       taskElement.click() => { 
         openEditTaskModal(task);
