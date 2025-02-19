@@ -1,13 +1,10 @@
 // TASK: import helper functions from utils
 // TASK: import initialData
 
-import { helperFunction } from './utils/taskFunction.js';
-import { initialData } from './utils/data.js';
+import { getTasks, createNewTask, patchTask, putTask, deleteTask } from './utils/taskFunctions.js';
+
+import { initialData } from './initialData.js';
 // Your program's logic starts here
-console.log(helperFunction());  // Output: This is a helper function from taskFunction.js!
-console.log(initialData);  
-
-
 /*************************************************************************************************************************************************
  * FIX BUGS!!!
  * **********************************************************************************************************************************************/
@@ -16,7 +13,7 @@ console.log(initialData);
 function initializeData() {
   if (!localStorage.getItem('tasks')) {
     localStorage.setItem('tasks', JSON.stringify(initialData)); 
-    localStorage.setItem('showSideBar', true)   //removed qoutes from "true"
+    localStorage.setItem('showSideBar', true)   //Removed qoutes from "true"
   } else {
     console.log('Data already exists in localStorage');
   }
@@ -67,7 +64,7 @@ function fetchAndDisplayBoardsAndTasks() {
   displayBoards(boards);
   if (boards.length > 0) {
     const localStorageBoard = JSON.parse(localStorage.getItem("activeBoard"))
-    activeBoard = localStorageBoard ? localStorageBoard ;  boards[0]; 
+    activeBoard = localStorageBoard ? localStorageBoard :  boards[0]; //Wrong ternary used... ; instead of :
     elements.headerBoardName.textContent = activeBoard
     styleActiveBoard(activeBoard)
     refreshTasksUI();
@@ -79,17 +76,19 @@ function fetchAndDisplayBoardsAndTasks() {
 function displayBoards(boards) {
   const boardsContainer = document.getElementById("boards-nav-links-div");
   boardsContainer.innerHTML = ''; // Clears the container
+
   boards.forEach(board => {
     const boardElement = document.createElement("button");
     boardElement.textContent = board;
     boardElement.classList.add("board-btn");
-    boardElement.click()  { 
+
+    boardElement.addEventListener("click" ,() =>  { //Added event listener and correct syntax in function
       elements.headerBoardName.textContent = board;
       filterAndDisplayTasksByBoard(board);
-      activeBoard = board //assigns active board
-      localStorage.setItem("activeBoard", JSON.stringify(activeBoard))
-      styleActiveBoard(activeBoard)
-    };
+      activeBoard = board; //Assigns active board
+      localStorage.setItem("activeBoard", JSON.stringify(activeBoard));
+      styleActiveBoard(activeBoard);
+    });
     boardsContainer.appendChild(boardElement);
   });
 
@@ -99,7 +98,7 @@ function displayBoards(boards) {
 // TASK: Fix Bugs
 function filterAndDisplayTasksByBoard(boardName) {
   const tasks = getTasks(); // Fetch tasks from a simulated local storage function
-  const filteredTasks = tasks.filter(task => task.board = boardName);
+  const filteredTasks = tasks.filter(task => task.board === boardName); //Added x2 equals signs
 
   // Ensure the column titles are set outside of this function or correctly initialized before this function runs
 
@@ -114,22 +113,21 @@ function filterAndDisplayTasksByBoard(boardName) {
     const tasksContainer = document.createElement("div");
     column.appendChild(tasksContainer);
 
-    filteredTasks.filter(task => task.status = status).forEach(task => { 
+    filteredTasks.filter(task => task.status === status).forEach(task => { //Added equal signs x2 for filter
       const taskElement = document.createElement("div");
       taskElement.classList.add("task-div");
       taskElement.textContent = task.title;
       taskElement.setAttribute('data-task-id', task.id);
     
       // Listen for a click event on each task and open a modal
-      taskElement.click() => { 
+      taskElement.addEventListener("click",() => { //Corrected event listener bug
         openEditTaskModal(task);
       });
 
       tasksContainer.appendChild(taskElement);
     });
   });
-}
-
+};
 
 function refreshTasksUI() {
   filterAndDisplayTasksByBoard(activeBoard);
@@ -138,20 +136,20 @@ function refreshTasksUI() {
 // Styles the active board by adding an active class
 // TASK: Fix Bugs
 function styleActiveBoard(boardName) {
-  document.querySelectorAll('.board-btn').foreach(btn => { 
+  document.querySelectorAll('.board-btn').forEach(btn => { 
     
     if(btn.textContent === boardName) {
-      btn.add('active') 
+      btn.classList.add('active') //Fixed missing "classlist"
     }
     else {
-      btn.remove('active'); 
+      btn.classList.remove('active'); //Fixed missing "classlist"
     }
   });
 }
 
 
 function addTaskToUI(task) {
-  const column = document.querySelector('.column-div[data-status="${task.status}"]'); 
+  const column = document.querySelector(`.column-div[data-status="${task.status}`);//Replaced qoutes with back ticks 
   if (!column) {
     console.error(`Column not found for status: ${task.status}`);
     return;
@@ -170,7 +168,7 @@ function addTaskToUI(task) {
   taskElement.textContent = task.title; // Modify as needed
   taskElement.setAttribute('data-task-id', task.id);
   
-  tasksContainer.appendChild(); 
+  tasksContainer.appendChild(taskElement); //Added missing argument: taskElement
 }
 
 
@@ -178,7 +176,7 @@ function addTaskToUI(task) {
 function setupEventListeners() {
   // Cancel editing task event listener
   const cancelEditBtn = document.getElementById('cancel-edit-btn');
-  cancelEditBtn.click() => toggleModal(false, elements.editTaskModal));
+  cancelEditBtn.addEventListener ("click", () => toggleModal(false, elements.editTaskModal));
 
   // Cancel adding new task event listener
   const cancelAddTaskBtn = document.getElementById('cancel-add-task-btn');
@@ -194,8 +192,8 @@ function setupEventListeners() {
   });
 
   // Show sidebar event listener
-  elements.hideSideBarBtn.click() => toggleSidebar(false));
-  elements.showSideBarBtn.click() => toggleSidebar(true));
+  elements.hideSideBarBtn.addEventListener("click", () => toggleSidebar(false));
+  elements.showSideBarBtn.addEventListener("click",() => toggleSidebar(true));
 
   // Theme switch event listener
   elements.themeSwitch.addEventListener('change', toggleTheme);
@@ -215,7 +213,7 @@ function setupEventListeners() {
 // Toggles tasks modal
 // Task: Fix bugs
 function toggleModal(show, modal = elements.modalWindow) {
-  modal.style.display = show ? 'block' => 'none'; 
+  modal.style.display = show ? 'block' : 'none'; //Wrong ternary operator ; instead of :
 }
 
 /*************************************************************************************************************************************************
@@ -227,8 +225,12 @@ function addTask(event) {
 
   //Assign user input to the task object
     const task = {
-      
+      title: taskTitle,
+      description: taskDescription,
+      status: taskStatus, //come back later, might need to add buttons
     };
+      
+    
     const newTask = createNewTask(task);
     if (newTask) {
       addTaskToUI(newTask);
@@ -236,15 +238,30 @@ function addTask(event) {
       elements.filterDiv.style.display = 'none'; // Also hide the filter overlay
       event.target.reset();
       refreshTasksUI();
-    }
+    };
+  }
+
+
+
+function toggleSidebar(show) {const sidebar = document.getElementById('side-bar-div'); // Get the sidebar element
+  if (show) {
+    sidebar.style.display = 'block';  // Show the sidebar if 'show' is true
+  } else {
+    sidebar.style.display = 'none';   // Hide the sidebar if 'show' is false
+  }
 }
 
 
-function toggleSidebar(show) {
- 
-}
+function toggleTheme() {const body = document.body;  // Get the body element
+  const currentTheme = body.classList.contains('dark-theme');  // Check if the body has the 'dark-theme' class
 
-function toggleTheme() {
+  if (currentTheme) {
+    body.classList.remove('dark-theme');  // Remove the dark theme class
+    localStorage.setItem('theme', 'light'); // Store the preference in localStorage
+  } else {
+    body.classList.add('dark-theme');  // Add the dark theme class
+    localStorage.setItem('theme', 'dark'); // Store the preference in localStorage
+  }
  
 }
 
