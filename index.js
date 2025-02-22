@@ -13,6 +13,7 @@ import { initialData } from './initialData.js';
 function initializeData() {
   if (!localStorage.getItem('tasks')) {
     console.log("Setting initial data in localStorage...");
+    console.log("Initial Data:", initialData); // Debugging step
     localStorage.setItem('tasks', JSON.stringify(initialData)); 
     localStorage.setItem('showSideBar', true);
   } else {
@@ -22,9 +23,9 @@ function initializeData() {
 
 
 
-
 window.onload = function() {
   initializeData();  // Calling the function
+  fetchAndDisplayBoardsAndTasks();
   const sideBarVisible = localStorage.getItem('showSideBar') === 'true'; 
   document.getElementById('side-bar-div').style.display = sideBarVisible ? 'block' : 'none'; 
 };
