@@ -58,14 +58,14 @@ document.addEventListener("DOMContentLoaded", function () {
         iconHideSidebar: document.getElementById('icon-hide-sidebar'),
 
         // Modal window elements
-        modalWindow: document.getElementById('task-modal'),
+        modalWindow: document.getElementById('new-task-modal-window'),
         editTaskModal: document.getElementById('edit-task-modal'),
 
         // Filter overlay
         filterDiv: document.getElementById('filterDiv'),
 
         // Task buttons
-        createNewTaskBtn: document.getElementById('create-new-task-btn'),
+        createNewTaskBtn: document.getElementById('create-task-btn'),
 
         showSideBarBtn: document.getElementById('show-side-bar-btn'),
         columnDiv: document.querySelectorAll('.column-div'),
