@@ -21,6 +21,27 @@
   --primary-box-shadow: 0px 8px 18px 0px rgba(176, 176, 188, 0.56);
 }
 
+#clear-storage-btn {
+  background-color: #683535; /* Red color for warning */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#clear-storage-btn:hover {
+  background-color: #342d2d; /* Darker red on hover */
+  transform: scale(1.05);
+}
+
+#clear-storage-btn:active {
+  transform: scale(0.95);
+}
+
 body {
   font-family: 'IBM Plex Sans', sans-serif;
   display: flex;
@@ -180,7 +201,7 @@ h4 {
   bottom: 45px;
   border-radius: 0 20px 20px 0;
   background-color: #219C90;
-  display: none;
+  display: block;
   cursor: pointer;
 }
 
@@ -432,6 +453,12 @@ header {
   display: inline;
   font-size: 35px;
   font-weight: 800;
+}
+
+@media (max-width: 768px) {  
+  #three-dots-icon {
+    display: inline;
+  }
 }
 
 #editBtnsDiv {
